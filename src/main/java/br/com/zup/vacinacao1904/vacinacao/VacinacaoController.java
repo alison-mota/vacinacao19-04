@@ -24,7 +24,7 @@ public class VacinacaoController {
     @PostMapping
     public ResponseEntity<String> novaVacinacao(@Valid @RequestBody VacinacaoRequest request){
           if(!usuarioRepository.existsByEmail(request.getEmail())){
-          return ResponseEntity.status(400).body("Usuário não cadastrado.");
+          return ResponseEntity.status(400).body("Não existe usuário cadastrado com o e-mail " + request.getEmail() + ".");
       }
           Usuario usuario = usuarioRepository.findByEmail(request.getEmail());
           Vacinacao vacinacao = request.toModel(usuario);

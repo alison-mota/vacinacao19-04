@@ -20,16 +20,16 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<String> novoUsuario(@Valid @RequestBody UsuarioRequest request) {
         if (usuarioRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(400).body("Email já cadastrado.");
+            return ResponseEntity.status(400).body("Este e-mail já está cadastrado em outro usuário.");
 
         } else if (usuarioRepository.existsByCpf(request.getCpf())) {
-            return ResponseEntity.status(400).body("CPF já cadastrado.");
+            return ResponseEntity.status(400).body("Este CPF já está cadastrado em outro usuário.");
         }
 
         Usuario usuario = request.toModel();
         usuarioRepository.save(usuario);
 
-        return ResponseEntity.status(201).body("Usuário cadastrado.");
+        return ResponseEntity.status(201).body("O usuário " + usuario.getNome() + " foi cadastrado.");
 
     }
 }
