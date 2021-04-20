@@ -29,7 +29,7 @@ public class UsuarioController {
         Usuario usuario = request.toModel();
         usuarioRepository.save(usuario);
 
-        return ResponseEntity.status(201).body("Usuário cadastrado com 100% de sucesso agora foi.");
+        return ResponseEntity.status(201).body("Usuário cadastrado.");
 
     }
 }
