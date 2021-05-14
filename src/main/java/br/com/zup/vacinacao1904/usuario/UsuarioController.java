@@ -1,6 +1,6 @@
 package br.com.zup.vacinacao1904.usuario;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,22 +14,22 @@ import javax.validation.Valid;
 
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping
-    public ResponseEntity<String> novoUsuario(@Valid @RequestBody UsuarioRequest request) {
-        if (usuarioRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(400).body("Este e-mail já está cadastrado em outro usuário.");
-
-        } else if (usuarioRepository.existsByCpf(request.getCpf())) {
-            return ResponseEntity.status(400).body("Este CPF já está cadastrado em outro usuário.");
+    public ResponseEntity<ResponseEntity> novoUsuario(@Valid @RequestBody UsuarioRequest request) {
+        if(usuarioService.validarEmail(request.getEmail())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (usuarioService.validarCpf(request.getCpf())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Usuario usuario = request.toModel();
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.status(201).body("O usuário " + usuario.getNome() + " foi cadastrado.");
+        usuarioService.salvarUsuario(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 }
