@@ -1,8 +1,7 @@
 package br.com.zup.vacinacao1904.vacinacao;
 
 import br.com.zup.vacinacao1904.usuario.Usuario;
-import br.com.zup.vacinacao1904.usuario.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,21 +14,24 @@ import javax.validation.Valid;
 @RequestMapping("api/vacinacao")
 public class VacinacaoController {
 
-    @Autowired
-    private VacinacaoReposity vacinacaoReposity;
+    private final VacinacaoService vacinacaoService;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    public VacinacaoController(VacinacaoService vacinacaoService) {
+        this.vacinacaoService = vacinacaoService;
+    }
+
 
     @PostMapping
-    public ResponseEntity<String> novaVacinacao(@Valid @RequestBody VacinacaoRequest request){
-          if(!usuarioRepository.existsByEmail(request.getEmail())){
-          return ResponseEntity.status(400).body("Não existe usuário cadastrado com o e-mail " + request.getEmail() + ".");
-      }
-          Usuario usuario = usuarioRepository.findByEmail(request.getEmail());
-          Vacinacao vacinacao = request.toModel(usuario);
-          vacinacaoReposity.save(vacinacao);
+    public ResponseEntity<String> novaVacinacao(@Valid @RequestBody VacinacaoRequest request) {
 
-          return ResponseEntity.status(201).body("Vacinação cadastrada para o usuário " + usuario.getNome() + ".");
-}
+        Usuario usuario = vacinacaoService.buscarPorEmail(request.getEmail());
+
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não encontramos um usuário cadastrado o e-mail " + request.getEmail() + ".");
+        }
+
+        vacinacaoService.salvarVacinacao(request, usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Vacinação cadastrada.");
+
+    }
 }

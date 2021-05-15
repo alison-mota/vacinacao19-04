@@ -1,6 +1,8 @@
 package br.com.zup.vacinacao1904.usuario;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService {
@@ -11,22 +13,19 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public boolean validarEmail(String email) {
-        if(usuarioRepository.existsByEmail(email)){
-            return true;
-        } return false;
+    public void validaUsuario(UsuarioRequest request) {
+
+        if (usuarioRepository.existsByCpf(request.getCpf())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um usuário cadastrado com esse CPF.");
+        } else if (usuarioRepository.existsByEmail(request.getCpf())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um usuário cadastrado com esse e-mail.");
+        }
     }
 
-    public boolean validarCpf(String cpf) {
-        if(usuarioRepository.existsByCpf(cpf)){
-            return true;
-        } return false;
-    }
-
-    public void salvarUsuario(UsuarioRequest usuarioRequest){
-        Usuario usuario = usuarioRequest.toModel();
+    public void salvarUsuario(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
+
 
 }
 

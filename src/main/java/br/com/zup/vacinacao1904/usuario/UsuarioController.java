@@ -21,15 +21,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseEntity> novoUsuario(@Valid @RequestBody UsuarioRequest request) {
-        if(usuarioService.validarEmail(request.getEmail())){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (usuarioService.validarCpf(request.getCpf())){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<String> novoUsuario(@Valid @RequestBody UsuarioRequest request) {
 
-        usuarioService.salvarUsuario(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        usuarioService.validaUsuario(request);
+
+        Usuario usuario = request.toModel();
+        usuarioService.salvarUsuario(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário cadastrado!");
 
     }
 }
