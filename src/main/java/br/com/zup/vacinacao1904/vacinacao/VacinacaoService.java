@@ -18,15 +18,11 @@ public class VacinacaoService {
     }
 
     public Usuario novaVacinacao(String email) {
-
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
-        return usuario;
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
     }
 
     public void salvaVacinacao(VacinacaoRequest request, Usuario usuario) {
         Vacinacao vacinacao = request.toModel(usuario);
         vacinacaoReposity.save(vacinacao);
     }
-
-
 }

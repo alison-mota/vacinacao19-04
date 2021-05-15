@@ -4,7 +4,6 @@ import br.com.zup.vacinacao1904.usuario.Usuario;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.Optional;
 
 public class VacinacaoRequest {
 

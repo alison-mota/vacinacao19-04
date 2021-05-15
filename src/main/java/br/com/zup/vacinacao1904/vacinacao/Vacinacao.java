@@ -20,7 +20,7 @@ public class Vacinacao {
     private LocalDateTime dataAplicacao = LocalDateTime.now();
 
     @Deprecated
-    public Vacinacao(){
+    public Vacinacao() {
     }
 
     public Vacinacao(String nomeVacina, Usuario usuario) {

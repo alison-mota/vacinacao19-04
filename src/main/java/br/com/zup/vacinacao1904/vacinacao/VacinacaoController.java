@@ -26,7 +26,7 @@ public class VacinacaoController {
 
         Usuario usuario = vacinacaoService.novaVacinacao(request.getEmail());
 
-       vacinacaoService.salvaVacinacao(request, usuario);
+        vacinacaoService.salvaVacinacao(request, usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body("Vacinação cadastrada.");
 
     }
