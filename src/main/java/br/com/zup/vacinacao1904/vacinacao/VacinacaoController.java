@@ -24,13 +24,9 @@ public class VacinacaoController {
     @PostMapping
     public ResponseEntity<String> novaVacinacao(@Valid @RequestBody VacinacaoRequest request) {
 
-        Usuario usuario = vacinacaoService.buscarPorEmail(request.getEmail());
+        Usuario usuario = vacinacaoService.novaVacinacao(request.getEmail());
 
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não encontramos um usuário cadastrado o e-mail " + request.getEmail() + ".");
-        }
-
-        vacinacaoService.salvarVacinacao(request, usuario);
+       vacinacaoService.salvaVacinacao(request, usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body("Vacinação cadastrada.");
 
     }

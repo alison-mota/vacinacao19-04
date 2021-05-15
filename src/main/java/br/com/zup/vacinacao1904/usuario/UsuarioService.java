@@ -25,8 +25,6 @@ public class UsuarioService {
     public void salvarUsuario(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
-
-
 }
 
 
